@@ -1,21 +1,21 @@
 # Object Detection using YOLOv11 - Custom Dataset
 
-Repository ini berisi proyek deteksi objek kustom menggunakan model **YOLOv11 Nano (yolo11n)** untuk mendeteksi empat kategori objek di lingkungan kampus: **car (mobil)**, **fountain (air mancur)**, **person (orang)**, dan **tree (pohon)**.
+This repository contains a custom object detection project using the **YOLOv11 Nano (yolo11n)** model to detect four categories of objects in a campus environment: **car**, **fountain**, **person**, and **tree**.
 
-Dataset yang digunakan berasal dari Roboflow (v2) dengan total 755 gambar berukuran $1280 \times 720$ piksel.
+The dataset is sourced from Roboflow (v2) with a total of 755 images of size $1280 \times 720$ pixels.
 
 ---
 
-## 🚀 Alur Kerja Proyek (Step-by-Step)
+## 🚀 Project Workflow (Step-by-Step)
 
-### Langkah 1: Persiapan Environment
-Pastikan Anda memiliki Python (versi 3.8 ke atas) dan instal semua pustaka dependensi yang dibutuhkan:
+### Step 1: Environment Setup
+Ensure you have Python (version 3.8 or above) installed, and install all required library dependencies:
 ```bash
 pip install ultralytics opencv-python tqdm requests pycocotools
 ```
 
-### Langkah 2: Persiapan Dataset & Konfigurasi
-1. Dataset diekstrak dari file `Yoloww.zip` ke dalam folder proyek. Struktur folder dataset disusun sebagai berikut:
+### Step 2: Dataset Preparation & Configuration
+1. The dataset is extracted from the `Yoloww.zip` file into the project folder. The dataset folder structure is organized as follows:
    ```text
    datasets + code/
    ├── train/
@@ -29,7 +29,7 @@ pip install ultralytics opencv-python tqdm requests pycocotools
    │   └── labels/
    └── data.yaml
    ```
-2. File konfigurasi **[data.yaml](./datasets%20+%20code/data.yaml)** mendefinisikan lokasi data dan label objek:
+2. The configuration file **[data.yaml](./datasets%20+%20code/data.yaml)** defines the locations of the data and object labels:
    ```yaml
    train: ../train/images
    val: ../valid/images
@@ -39,26 +39,26 @@ pip install ultralytics opencv-python tqdm requests pycocotools
    names: ["car", "fountain", "person", "tree"]
    ```
 
-### Langkah 3: Pelatihan Model (Training)
-Pelatihan model dilakukan menggunakan model pra-terlatih `yolo11n.pt` selama **20 epoch** dengan ukuran gambar input 640 piksel. Perintah CLI yang dijalankan:
+### Step 3: Model Training
+Model training is performed using the pre-trained `yolo11n.pt` model for **20 epochs** with an input image size of 640 pixels. The CLI command executed:
 ```bash
 yolo train model=yolo11n.pt data=data.yaml epochs=20 imgsz=640
 ```
-Proses pelatihan menghasilkan bobot model terbaik (`best.pt`) dan bobot terakhir (`last.pt`) di dalam folder hasil training.
+The training process generates the best model weights (`best.pt`) and the last weights (`last.pt`) inside the training results folder.
 
-### Langkah 4: Evaluasi Model
-Model dievaluasi menggunakan data validasi untuk mengukur akurasi deteksi melalui metrik *Precision*, *Recall*, dan *mean Average Precision (mAP)*.
+### Step 4: Model Evaluation
+The model is evaluated using the validation data to measure detection accuracy through metrics such as Precision, Recall, and mean Average Precision (mAP).
 
-### Langkah 5: Prediksi Real-Time (Inference)
-Deteksi objek secara langsung menggunakan kamera (webcam) atau file video dapat dijalankan dengan memuat bobot model hasil training (`best.pt`) menggunakan OpenCV:
+### Step 5: Real-Time Prediction (Inference)
+Direct object detection using a camera (webcam) or a video file can be run by loading the best model weights (`best.pt`) using OpenCV:
 ```python
 import cv2
 from ultralytics import YOLO
 
-# Load model terbaik hasil training
+# Load the best trained model
 model = YOLO('datasets + code/best.pt')
 
-# Hubungkan ke kamera eksternal / internal (ID: 0)
+# Connect to external / internal camera (ID: 0)
 cap = cv2.VideoCapture(0)
 
 while True:
@@ -66,11 +66,11 @@ while True:
     if not ret:
         break
 
-    # Jalankan deteksi
+    # Run detection
     results = model(frame)
     annotated_frame = results[0].plot()
 
-    # Tampilkan frame hasil deteksi
+    # Display the detection results frame
     cv2.imshow('YOLOv11 Real-Time Detection', annotated_frame)
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
@@ -81,39 +81,39 @@ cv2.destroyAllWindows()
 
 ---
 
-## 📊 Hasil Pelatihan & Evaluasi
+## 📊 Training Results & Evaluation
 
-Setelah pelatihan selama 20 epoch, model mencapai nilai **mAP50 sebesar 0.565** dan **mAP50-95 sebesar 0.324** untuk keseluruhan kelas.
+After training for 20 epochs, the model achieved a **mAP50 of 0.565** and a **mAP50-95 of 0.324** across all classes.
 
-### Rincian Akurasi per Kelas:
-| Kelas | Jumlah Sampel (Instances) | Precision (P) | Recall (R) | mAP50 | mAP50-95 |
+### Accuracy Details per Class:
+| Class | Instances | Precision (P) | Recall (R) | mAP50 | mAP50-95 |
 | :--- | :---: | :---: | :---: | :---: | :---: |
 | **All Classes** | 1565 | 0.680 | 0.532 | 0.565 | 0.324 |
-| **Car (Mobil)** | 110 | 0.569 | 0.277 | 0.277 | 0.096 |
-| **Fountain (Air Mancur)** | 77 | 0.675 | 0.416 | 0.437 | 0.189 |
-| **Person (Orang)** | 351 | 0.738 | 0.709 | 0.755 | 0.487 |
-| **Tree (Pohon)** | 1027 | 0.739 | 0.725 | 0.792 | 0.523 |
+| **Car** | 110 | 0.569 | 0.277 | 0.277 | 0.096 |
+| **Fountain** | 77 | 0.675 | 0.416 | 0.437 | 0.189 |
+| **Person** | 351 | 0.738 | 0.709 | 0.755 | 0.487 |
+| **Tree** | 1027 | 0.739 | 0.725 | 0.792 | 0.523 |
 
-### Grafik Metrik Performa:
-Berikut adalah kurva hasil training yang tersimpan dalam repositori:
+### Performance Metrics Charts:
+The training results curves saved in the repository are shown below:
 
 #### 1. Confusion Matrix (Normalized)
-Menggambarkan tingkat akurasi prediksi model terhadap label asli untuk setiap kelas.
+Illustrates the accuracy of the model's predictions compared to the actual ground truth labels for each class.
 ![Confusion Matrix](./confusion_matrix_normalized.png)
 
-#### 2. Progress Hasil Training (Results)
-Grafik loss fungsi (box_loss, cls_loss, dfl_loss) serta performa metrik (mAP) selama 20 epoch pelatihan.
+#### 2. Training Results Progress (Results)
+Graphs of the loss functions (box_loss, cls_loss, dfl_loss) and performance metrics (mAP) over the 20 epochs of training.
 ![Training Results](./results.png)
 
-#### 3. Kurva F1-Score & Precision-Recall (PR)
-Menunjukkan keseimbangan sensitivitas (Recall) dan kepresisian (Precision) model.
+#### 3. F1-Score & Precision-Recall (PR) Curves
+Show the balance between the model's sensitivity (Recall) and precision (Precision).
 ![F1 Curve](./F1_curve.png)
 ![PR Curve](./PR_curve.png)
 
 ---
 
-## 🎥 Hasil Uji Coba Video
-Beberapa file rekaman hasil uji coba deteksi objek langsung pada video sampel telah disertakan dalam repositori. Anda dapat mengklik tautan di bawah ini untuk memutar/mengunduh file video tersebut:
-* [Video Uji Coba 1 (2024-11-11 15-17-30.mp4)](./2024-11-11%2015-17-30.mp4)
-* [Video Uji Coba 2 (2024-11-11 15-19-25.mp4)](./2024-11-11%2015-19-25.mp4)
-* [Video Uji Coba 3 (2024-11-11 15-21-17.mp4)](./2024-11-11%2015-21-17.mp4)
+## 🎥 Video Testing Results
+Several video recordings of direct object detection testing on sample videos have been included in the repository. You can click the links below to play/download the video files:
+* [Test Video 1 (2024-11-11 15-17-30.mp4)](./2024-11-11%2015-17-30.mp4)
+* [Test Video 2 (2024-11-11 15-19-25.mp4)](./2024-11-11%2015-19-25.mp4)
+* [Test Video 3 (2024-11-11 15-21-17.mp4)](./2024-11-11%2015-21-17.mp4)
