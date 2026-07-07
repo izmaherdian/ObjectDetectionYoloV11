@@ -112,8 +112,14 @@ Menunjukkan keseimbangan sensitivitas (Recall) dan kepresisian (Precision) model
 
 ---
 
-## 🎥 Hasil Uji Coba Video
-Beberapa file rekaman hasil uji coba deteksi objek langsung pada video sampel juga telah disertakan di root repositori:
-* `2024-11-11 15-17-30.mp4`
-* `2024-11-11 15-19-25.mp4`
-* `2024-11-11 15-21-17.mp4`
+## 🎥 Hasil Uji Coba Video (Video Demonstration)
+Berikut adalah cuplikan video hasil uji coba deteksi objek menggunakan model YOLOv11 yang dapat diputar langsung di halaman GitHub:
+
+### Video Uji Coba 1
+<video src="./2024-11-11%2015-17-30.mp4" controls width="100%"></video>
+
+### Video Uji Coba 2
+<video src="./2024-11-11%2015-19-25.mp4" controls width="100%"></video>
+
+### Video Uji Coba 3
+<video src="./2024-11-11%2015-21-17.mp4" controls width="100%"></video>
